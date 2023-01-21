@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Polly;
 using Polly.Retry;
 
 namespace PollyTest.WebAPI.Controllers
@@ -14,10 +15,11 @@ namespace PollyTest.WebAPI.Controllers
         {
             int retryCount = 0;
             //Immediate retry policy
-            //_httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-            //    .RetryAsync(3, onRetry: (response, timeSpan) => {
-            //        Console.WriteLine(retryCount++);
-            //    });
+            _httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .RetryAsync(3, onRetry: (response, timeSpan) =>
+                {
+                    Console.WriteLine(retryCount++);
+                });
         }
 
         [HttpGet("{id}")]
