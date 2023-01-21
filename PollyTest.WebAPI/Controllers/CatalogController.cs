@@ -23,13 +23,13 @@ namespace PollyTest.WebAPI.Controllers
 
             //Exponential wait and retry policy
             _httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                .WaitAndRetryAsync(3, retryAttempt =>
+                .WaitAndRetryAsync(3, sleepDurationProvider: retryAttempt =>
                 {
                     return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2);
                 });
         }
 
-        [HttpGet("{id}")]
+            [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var httpClient = new HttpClient();
