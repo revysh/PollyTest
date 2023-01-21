@@ -13,12 +13,19 @@ namespace PollyTest.WebAPI.Controllers
 
         public CatalogController()
         {
-            int retryCount = 0;
-            //Immediate retry policy
+            //int retryCount = 0;
+            ////Immediate retry policy
+            //_httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            //    .RetryAsync(3, onRetry: (response, timeSpan) =>
+            //    {
+            //        Console.WriteLine(retryCount++);
+            //    });
+
+            //Exponential wait and retry policy
             _httpRetryPolicy = Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                .RetryAsync(3, onRetry: (response, timeSpan) =>
+                .WaitAndRetryAsync(3, retryAttempt =>
                 {
-                    Console.WriteLine(retryCount++);
+                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2);
                 });
         }
 
