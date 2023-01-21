@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PollyTest.WebAPI/obj/*
+/.vs
+/PollyTest.WebAPI/bin/*
